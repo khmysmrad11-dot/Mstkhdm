@@ -11,15 +11,19 @@
             --primary-color: #ffffff;
             --accent-color: #007AFF;
             --success-color: #30d158;
-            --glass-bg: rgba(255, 255, 255, 0.06);
-            --glass-border: rgba(255, 255, 255, 0.12);
+            /* خلفية زجاجية أنعم */
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
             --dev-glow: #00d4ff;
+            /* لون خلفية ليلي بدلاً من الأسود */
+            --bg-deep: #0a0f1d; 
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
 
         body {
-            background: #000;
+            /* تدرج لوني يكسر حدة السواد */
+            background: radial-gradient(circle at center, #161d31 0%, #0a0f1d 100%);
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -29,86 +33,80 @@
             overflow: hidden;
         }
 
-        /* التوهج الليلي الذكي */
+        /* توهج محيطي ملون يعطي حياة للخلفية */
         .ambient-glow {
-            position: fixed; width: 300px; height: 300px;
-            background: var(--accent-color);
-            filter: blur(150px); opacity: 0.15; z-index: -1;
-            animation: glowMove 10s infinite alternate;
-        }
-        @keyframes glowMove {
-            0% { transform: translate(-50%, -50%); background: #007AFF; }
-            100% { transform: translate(50%, 50%); background: #5856D6; }
+            position: fixed; width: 400px; height: 400px;
+            background: linear-gradient(45deg, var(--accent-color), #5856D6);
+            filter: blur(120px); opacity: 0.12; z-index: -1;
+            top: 20%; left: 10%;
+            animation: pulseGlow 8s infinite alternate;
         }
 
-        /* التصميم المشترك للأزرار العلوية */
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.1; }
+            100% { transform: scale(1.3); opacity: 0.18; }
+        }
+
+        /* شريط الإعلانات - جعلته شبه شفاف ليعطي طابعاً عصرياً */
+        .news-ticker {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border); 
+            white-space: nowrap;
+            overflow: hidden; padding: 12px 0; z-index: 1000;
+        }
+        .ticker-content {
+            display: inline-block; padding-right: 100%;
+            animation: ticker 60s linear infinite; font-size: 13px;
+            font-weight: 500; color: #a5ccff;
+        }
+
         .top-btn {
             position: fixed; top: 55px;
             display: flex; align-items: center; gap: 10px;
             background: var(--glass-bg); padding: 8px 15px;
             border-radius: 20px; border: 1px solid var(--glass-border);
             cursor: pointer; z-index: 1100; transition: 0.3s;
-            font-size: 14px;
+            font-size: 14px; backdrop-filter: blur(10px);
         }
-        .top-btn:hover { background: rgba(255,255,255,0.1); }
+        .top-btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
         .top-left-clock { left: 20px; }
         .top-right-remind { right: 20px; }
 
-        /* شريط الإعلانات */
-        .news-ticker {
-            position: fixed; top: 0; width: 100%;
-            background: rgba(0, 122, 255, 0.1); backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border); white-space: nowrap;
-            overflow: hidden; padding: 12px 0; z-index: 1000;
+        .main-container {
+            width: 90%; max-width: 400px; padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border); 
+            border-radius: 40px;
+            text-align: center; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
         }
-        .ticker-content {
-            display: inline-block; padding-right: 100%;
-            animation: ticker 60s linear infinite; font-size: 13px;
-            font-weight: 500; color: var(--accent-color);
-        }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* زر المباريات */
         .bottom-matches-btn {
             position: fixed; bottom: 30px; left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, #FF9500, #FF3B30);
+            background: linear-gradient(135deg, #007AFF, #00C6FF);
             color: #fff; padding: 12px 25px; border-radius: 50px;
             font-size: 14px; font-weight: bold; border: none;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(255, 59, 48, 0.3);
+            cursor: pointer; box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
             z-index: 1500; transition: 0.3s; display: flex; align-items: center; gap: 8px;
         }
 
-        .main-container {
-            width: 90%; max-width: 400px; padding: 40px 30px;
-            background: var(--glass-bg); backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 40px;
-            text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.8);
-        }
-
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(15px); display: none; align-items: center;
-            justify-content: center; z-index: 3000;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-content {
-            width: 90%; max-width: 350px; background: var(--glass-bg);
-            border: 1px solid var(--glass-border); border-radius: 35px; padding: 25px;
-        }
-
         .match-card {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.07); border: 1px solid var(--glass-border);
             border-radius: 20px; padding: 15px; margin-bottom: 10px;
         }
 
         .btn-login {
-            width: 100%; padding: 15px; background: var(--primary-color);
-            border: none; border-radius: 24px; color: #000; font-size: 16px;
+            width: 100%; padding: 16px; background: #fff;
+            border: none; border-radius: 24px; color: #0a0f1d; font-size: 16px;
             font-weight: 700; cursor: pointer; margin-top: 10px;
+            transition: 0.3s;
         }
+        .btn-login:active { transform: scale(0.98); }
 
-        /* أنيميشن الاسم الإنجليزي */
         .dev-name-en {
             display: block; font-size: 14px; font-weight: 800;
             color: var(--dev-glow); text-shadow: 0 0 10px var(--dev-glow);
@@ -116,14 +114,23 @@
             animation: textPulse 2s infinite alternate;
         }
         @keyframes textPulse {
-            0% { opacity: 0.6; transform: scale(0.98); text-shadow: 0 0 5px var(--dev-glow); }
-            100% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 20px var(--dev-glow), 0 0 30px var(--dev-glow); }
+            0% { opacity: 0.7; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1.02); }
         }
 
-        .dev-section {
-            margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.03);
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.05);
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(10, 15, 29, 0.85);
+            backdrop-filter: blur(20px); display: none; align-items: center;
+            justify-content: center; z-index: 3000;
         }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            width: 90%; max-width: 350px; background: rgba(30, 35, 50, 0.9);
+            border: 1px solid var(--glass-border); border-radius: 35px; padding: 25px;
+        }
+        
+        input::placeholder { color: rgba(255,255,255,0.3); }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
 
@@ -152,25 +159,23 @@
 </button>
 
 <div id="progressBar" style="position: fixed; top: 0; left: 0; width: 0%; height: 3px; background: linear-gradient(to right, var(--accent-color), var(--success-color)); z-index: 2000; transition: width 0.4s;"></div>
-<div class="bg-animate" style="position:fixed; inset:0; z-index:-2; background: radial-gradient(circle at 10% 20%, #1a1a2e 0%, transparent 40%), radial-gradient(circle at 90% 80%, #0f3460 0%, transparent 40%), radial-gradient(circle at 50% 50%, #050505 0%, transparent 100%);"></div>
 
 <div class="main-container">
     <div style="position:relative; width:80px; height:80px; margin:0 auto 15px; display:flex; align-items:center; justify-content:center;">
-        <div style="position:absolute; width:100%; height:100%; border:2px solid var(--accent-color); border-radius:50%; animation:pulse 2s infinite; opacity:0;"></div>
-        <i class="fa-solid fa-wifi" style="font-size:40px;color:var(--accent-color)"></i>
+        <i class="fa-solid fa-wifi" style="font-size:40px;color:var(--accent-color); filter: drop-shadow(0 0 10px var(--accent-color));"></i>
     </div>
 
     <div class="logo-area">
-        <h1>شبكة الدار</h1>
-        <p style="opacity:.4;font-size:11px">اتصال ذكي • سرعة فائقة</p>
-        <div id="netStatus" style="font-size:11px; opacity:.4; margin-top:8px;"></div>
+        <h1 style="letter-spacing: 1px;">شبكة الدار</h1>
+        <p style="opacity:.5;font-size:11px; margin-top: 5px;">اتصال ذكي • سرعة فائقة</p>
+        <div id="netStatus" style="font-size:11px; opacity:.6; margin-top:8px;"></div>
     </div>
 
     <div style="height:1px; background:linear-gradient(to left, transparent, var(--glass-border), transparent); margin:25px 0;"></div>
 
     <form onsubmit="handleAuth(event)">
         <div style="position:relative; margin-bottom:15px;">
-            <input type="text" id="cardCode" placeholder="أدخل رمز الكرت" autocomplete="off" style="width:100%; padding:22px; background:rgba(255,255,255,0.04); border:1px solid var(--glass-border); border-radius:24px; color:#fff; font-size:18px; outline:none; text-align:center;">
+            <input type="text" id="cardCode" placeholder="أدخل رمز الكرت" autocomplete="off" style="width:100%; padding:22px; background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); border-radius:24px; color:#fff; font-size:18px; outline:none; text-align:center; transition: 0.3s;">
             <i class="fa-solid fa-clock-rotate-left" id="restoreBtn" onclick="fillLastCard()" style="position:absolute; left:15px; top:50%; transform:translateY(-50%); color:var(--accent-color); cursor:pointer; opacity:0; transition:0.3s;"></i>
         </div>
         <button class="btn-login" id="mainBtn">
@@ -178,29 +183,29 @@
         </button>
     </form>
 
-    <div id="statusMsg" style="margin-top:15px;font-size:13px;"></div>
+    <div id="statusMsg" style="margin-top:15px;font-size:13px; min-height: 20px;"></div>
 
     <div style="display:flex; justify-content:center; margin-top:20px; gap:10px;">
-        <button class="sub-btn" onclick="toggleModal('plansModal',true)" style="background:var(--glass-bg); border:1px solid var(--glass-border); color:rgba(255,255,255,0.7); padding:10px 15px; border-radius:15px; font-size:12px; cursor:pointer;"><i class="fa-solid fa-list"></i> الباقات</button>
-        <button class="sub-btn" onclick="toggleModal('supportModal',true)" style="background:var(--glass-bg); border:1px solid var(--glass-border); color:rgba(255,255,255,0.7); padding:10px 15px; border-radius:15px; font-size:12px; cursor:pointer;"><i class="fa-solid fa-headset"></i> الدعم</button>
+        <button class="sub-btn" onclick="toggleModal('plansModal',true)" style="background:var(--glass-bg); border:1px solid var(--glass-border); color:rgba(255,255,255,0.8); padding:10px 20px; border-radius:15px; font-size:12px; cursor:pointer;"><i class="fa-solid fa-list"></i> الباقات</button>
+        <button class="sub-btn" onclick="toggleModal('supportModal',true)" style="background:var(--glass-bg); border:1px solid var(--glass-border); color:rgba(255,255,255,0.8); padding:10px 20px; border-radius:15px; font-size:12px; cursor:pointer;"><i class="fa-solid fa-headset"></i> الدعم</button>
     </div>
 
-    <div style="margin-top:30px;opacity:.2;font-size:10px">AL-DAR NETWORK © 2026</div>
+    <div style="margin-top:30px;opacity:.3;font-size:10px">AL-DAR NETWORK © 2026</div>
 </div>
 
 <div class="modal-overlay" id="plansModal">
     <div class="modal-content" style="text-align: center;">
         <i class="fa-solid fa-layer-group" style="font-size: 30px; color: var(--accent-color); margin-bottom: 15px;"></i>
         <h3 style="margin-bottom: 20px;">باقات الإنترنت</h3>
-        <div style="padding:15px; background:rgba(255,255,255,0.05); border-radius:20px; margin-bottom:10px; border:1px solid var(--glass-border); display:flex; justify-content:space-between;">
+        <div class="match-card" style="display:flex; justify-content:space-between; align-items: center;">
             <span>يوم كامل / 2GB</span>
             <span style="font-weight: bold; color: var(--success-color);">500 ريال</span>
         </div>
-        <div style="padding:15px; background:rgba(255,255,255,0.05); border-radius:20px; margin-bottom:10px; border:1px solid var(--glass-border); display:flex; justify-content:space-between;">
+        <div class="match-card" style="display:flex; justify-content:space-between; align-items: center;">
             <span>أسبوع / 10GB</span>
             <span style="font-weight: bold; color: var(--success-color);">2500 ريال</span>
         </div>
-        <button class="btn-login" onclick="toggleModal('plansModal', false)">إغلاق</button>
+        <button class="btn-login" onclick="toggleModal('plansModal', false)" style="background: var(--glass-bg); color: #fff; border: 1px solid var(--glass-border);">إغلاق</button>
     </div>
 </div>
 
@@ -209,12 +214,12 @@
         <i class="fa-brands fa-whatsapp" style="font-size:40px;color:#25D366; margin-bottom: 10px;"></i>
         <h3 style="margin-bottom: 5px;">الدعم الفني</h3>
         <a href="https://wa.me/967733737527" style="color:#25D366; text-decoration:none; font-weight:bold; font-size: 18px; display: block; margin-bottom: 15px;">733737527</a>
-        <div class="dev-section">
-            <p style="font-size: 11px; opacity: 0.5; margin-bottom: 5px;">تطوير وتصميم:</p>
-            <p style="font-size: 15px; font-weight: bold; color: #fff;">خميس مراد جروان</p>
+        <div class="dev-section" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; border: 1px solid var(--glass-border);">
+            <p style="font-size: 11px; opacity: 0.6; margin-bottom: 5px;">تطوير وتصميم:</p>
+            <p style="font-size: 15px; font-weight: bold;">خميس مراد جروان</p>
             <span class="dev-name-en">KHAMIS MURAD JARWAN</span>
         </div>
-        <button class="btn-login" onclick="toggleModal('supportModal',false)" style="margin-top:10px; opacity:0.8">إغلاق</button>
+        <button class="btn-login" onclick="toggleModal('supportModal',false)" style="margin-top:15px; background: rgba(255,255,255,0.1); color: #fff;">إغلاق</button>
     </div>
 </div>
 
@@ -222,34 +227,34 @@
     <div class="modal-content" style="text-align: center;">
         <i class="fa-solid fa-quote-right" style="font-size: 30px; color: var(--success-color); margin-bottom: 15px;"></i>
         <h3 style="margin-bottom: 15px; color: var(--success-color);">فذكّر إن نفعت الذكرى</h3>
-        <div id="remindText" style="font-size: 16px; line-height: 1.6; margin-bottom: 25px; color: #eee; font-style: italic;"></div>
-        <button class="btn-login" onclick="toggleModal('remindModal', false)" style="background: var(--glass-bg); color: #fff; border: 1px solid var(--glass-border);">تقبل الله منا ومنكم</button>
+        <div id="remindText" style="font-size: 16px; line-height: 1.6; margin-bottom: 25px; color: #cbd5e0; font-style: italic;"></div>
+        <button class="btn-login" onclick="toggleModal('remindModal', false)" style="background: var(--success-color); color: #fff;">تقبل الله منا ومنكم</button>
     </div>
 </div>
 
 <div class="modal-overlay" id="prayerModal">
     <div class="modal-content" style="text-align: center;">
         <i class="fa-solid fa-mosque" style="font-size: 30px; color: var(--accent-color); margin-bottom: 10px;"></i>
-        <h3>مواقيت الصلاة</h3>
-        <p style="font-size: 11px; opacity: 0.5; margin-bottom: 20px;">مكة المكرمة</p>
-        <div style="font-size:14px; opacity:0.8">
-            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid rgba(255,255,255,0.05)"><span>الفجر</span> <span>05:22 ص</span></div>
-            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid rgba(255,255,255,0.05)"><span>الظهر</span> <span>12:26 م</span></div>
-            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid rgba(255,255,255,0.05)"><span>العصر</span> <span>03:40 م</span></div>
-            <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid rgba(255,255,255,0.05)"><span>المغرب</span> <span>06:05 م</span></div>
-            <div style="display:flex; justify-content:space-between; padding:10px;"><span>العشاء</span> <span>07:35 م</span></div>
+        <h3 style="margin-bottom: 10px;">مواقيت الصلاة</h3>
+        <p style="font-size: 11px; opacity: 0.6; margin-bottom: 20px;">مكة المكرمة</p>
+        <div style="font-size:14px;">
+            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid rgba(255,255,255,0.05)"><span>الفجر</span> <span>05:22 ص</span></div>
+            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid rgba(255,255,255,0.05)"><span>الظهر</span> <span>12:26 م</span></div>
+            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid rgba(255,255,255,0.05)"><span>العصر</span> <span>03:40 م</span></div>
+            <div style="display:flex; justify-content:space-between; padding:12px; border-bottom:1px solid rgba(255,255,255,0.05)"><span>المغرب</span> <span>06:05 م</span></div>
+            <div style="display:flex; justify-content:space-between; padding:12px;"><span>العشاء</span> <span>07:35 م</span></div>
         </div>
-        <button class="btn-login" onclick="toggleModal('prayerModal', false)">إغلاق</button>
+        <button class="btn-login" onclick="toggleModal('prayerModal', false)" style="margin-top: 15px;">إغلاق</button>
     </div>
 </div>
 
 <div class="modal-overlay" id="matchesModal">
     <div class="modal-content" style="text-align: center;">
-        <i class="fa-solid fa-circle-play" style="font-size: 30px; color: #FF9500; margin-bottom: 10px;"></i>
+        <i class="fa-solid fa-circle-play" style="font-size: 30px; color: #00C6FF; margin-bottom: 15px;"></i>
         <h3 style="margin-bottom: 20px;">أهم مباريات اليوم</h3>
-        <div class="match-card"><div style="display:flex; justify-content:space-between; align-items:center;"><span>ريال مدريد</span><span style="color:#FF3B30; font-weight:900;">VS</span><span>برشلونة</span></div><small style="opacity:0.5">10:00 م - مكة</small></div>
-        <div class="match-card"><div style="display:flex; justify-content:space-between; align-items:center;"><span>ليفربول</span><span style="color:#FF3B30; font-weight:900;">VS</span><span>مان سيتي</span></div><small style="opacity:0.5">07:30 م - مكة</small></div>
-        <div class="match-card"><div style="display:flex; justify-content:space-between; align-items:center;"><span>الهلال</span><span style="color:#FF3B30; font-weight:900;">VS</span><span>النصر</span></div><small style="opacity:0.5">09:00 م - مكة</small></div>
+        <div class="match-card"><div style="display:flex; justify-content:space-between; align-items:center;"><span>ريال مدريد</span><span style="color:var(--accent-color); font-weight:900;">VS</span><span>برشلونة</span></div><small style="opacity:0.6">10:00 م</small></div>
+        <div class="match-card"><div style="display:flex; justify-content:space-between; align-items:center;"><span>ليفربول</span><span style="color:var(--accent-color); font-weight:900;">VS</span><span>مان سيتي</span></div><small style="opacity:0.6">07:30 م</small></div>
+        <div class="match-card"><div style="display:flex; justify-content:space-between; align-items:center;"><span>الهلال</span><span style="color:var(--accent-color); font-weight:900;">VS</span><span>النصر</span></div><small style="opacity:0.6">09:00 م</small></div>
         <button class="btn-login" onclick="toggleModal('matchesModal', false)" style="background:rgba(255,255,255,0.1); color:#fff">إغلاق</button>
     </div>
 </div>
@@ -299,7 +304,7 @@ function handleAuth(e){
     const statusMsg = document.getElementById('statusMsg');
     const mainBtn = document.getElementById('mainBtn');
 
-    if(code.length < 5){ statusMsg.innerHTML = "❌ رمز غير صحيح"; return; }
+    if(code.length < 5){ statusMsg.innerHTML = "<span style='color:#ff3b30'>❌ رمز غير صحيح</span>"; return; }
     localStorage.setItem("lastCard", code);
     mainBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
     bar.style.width = "40%";
@@ -307,6 +312,7 @@ function handleAuth(e){
         bar.style.width = "100%"; 
         statusMsg.innerHTML = '<span style="color:var(--success-color)">✅ تم التفعيل بنجاح</span>'; 
         mainBtn.style.background = "var(--success-color)"; 
+        mainBtn.style.color = "#fff";
         mainBtn.innerHTML = '<i class="fa-solid fa-check"></i> متصل'; 
         setTimeout(() => bar.style.width = "0%", 800); 
     }, 1500);
@@ -314,7 +320,7 @@ function handleAuth(e){
 
 function toggleModal(id, show){ document.getElementById(id).classList.toggle("active", show); }
 
-if (localStorage.getItem("lastCard")) { document.getElementById('restoreBtn').style.opacity = "0.6"; }
+if (localStorage.getItem("lastCard")) { document.getElementById('restoreBtn').style.opacity = "0.7"; }
 </script>
 
 </body>
